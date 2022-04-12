@@ -9,6 +9,8 @@ export class AppComponent {
   title = 'Fitness-tracker';
   // sideNavOpen: boolean = false;
 
-
+  logout(){
+    console.log('logout')
+  }
 
 }
