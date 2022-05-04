@@ -20,7 +20,11 @@ export class TrainingService {
             return docArray.map(doc => {
                 return {
                     id: doc.payload.doc.id,
-                    ...doc.payload.doc.data()
+                    // ...doc.payload.doc.data()
+                    // use if we have different key name
+                    name: doc.payload.doc.data().name,
+                    duration: doc.payload.doc.data().duration,
+                    calories: doc.payload.doc.data().calories,
                 }
             });
         })).subscribe((exercises: Excercise[])=>{
@@ -39,13 +43,13 @@ export class TrainingService {
     }
 
     completeExercise() {
-        this.exercises.push({ ...this.runningExcercise, date: new Date(), state: 'completed' });
+        this.addDatatoDatabase({ ...this.runningExcercise, date: new Date(), state: 'completed' });
         this.runningExcercise = null;
         this.excerciseChanged.next(null);
     }
 
     cancelExercise(progress: number) {
-        this.exercises.push({
+        this.addDatatoDatabase({
             ...this.runningExcercise,
             duration: this.runningExcercise.duration * (progress / 100),
             calories: this.runningExcercise.calories * (progress / 100),
@@ -58,6 +62,10 @@ export class TrainingService {
 
     getCompletedOrCancelledExcercises() {
         return this.exercises.slice();
+    }
+
+    private addDatatoDatabase(excercise : Excercise){
+        this.fireDB.collection('finishedExercises').add(excercise);
     }
 
 
