@@ -4,6 +4,7 @@ import { TrainingService } from '../training.service';
 import { NgForm } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore'
 import { Subscription } from 'rxjs';
+import { UIService } from 'src/app/shared/ui.service';
 @Component({
   selector: 'app-new-training',
   templateUrl: './new-training.component.html',
@@ -12,16 +13,19 @@ import { Subscription } from 'rxjs';
 export class NewTrainingComponent implements OnInit, OnDestroy {
 
   excercises: Excercise[];
-  exerciseSub: Subscription;
-  isLoading= true;
+  private exerciseSub: Subscription;
+  isLoading = true;
+  private loadingSubs: Subscription;
 
 
-  constructor(private trainingService: TrainingService) { }
+  constructor(private trainingService: TrainingService, private uiService: UIService) { }
 
   ngOnInit(): void {
+    this.loadingSubs = this.uiService.loadingStateChanged.subscribe(isLoading => {
+      this.isLoading = isLoading;
+    })
     this.exerciseSub = this.trainingService.exChanged.subscribe(excercises => {
       this.excercises = excercises;
-      this.isLoading= false
     });
     this.trainingService.fetchAvailableExcercises();
 
@@ -33,6 +37,7 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.exerciseSub.unsubscribe();
+    this.loadingSubs.unsubscribe();
   }
 
 }
