@@ -1,24 +1,24 @@
 <section class="new-training" fxLayout fxLayoutAlign="center">
   <form action="" (ngSubmit)="onStartTraining(f)" #f="ngForm">
     <mat-card fxFlex="400px" fxFlex.xs="100%">
-        <mat-card-title fxLayoutAlign="center">Time to start a workout!</mat-card-title>
-        <mat-card-content fxLayoutAlign="center">
-            
-            <mat-form-field *ngIf="!isLoading" appearance="fill">
-                <mat-label>Select Type of Training</mat-label>
-                <mat-select placeholder="Lets start Excercise" ngModel name="exercise" required>
-                  <mat-option *ngFor="let exercise of excercises" [value]="exercise.id">
-                    {{exercise.name}}
-                  </mat-option>
-                  
-                </mat-select>
-              </mat-form-field>
-              <mat-spinner  *ngIf="isLoading"></mat-spinner>
-        </mat-card-content>
-        <mat-card-actions fxLayoutAlign="center">
-            <button mat-button type="submit" [disabled]="f.invalid">Start</button>
-        </mat-card-actions>
+      <mat-card-title fxLayoutAlign="center">Time to start a workout!</mat-card-title>
+      <mat-card-content fxLayoutAlign="center">
+
+        <mat-form-field *ngIf="!isLoading" appearance="fill">
+          <mat-label>Select Type of Training</mat-label>
+          <mat-select placeholder="Lets start Excercise" ngModel name="exercise" required>
+            <mat-option *ngFor="let exercise of excercises" [value]="exercise.id">
+              {{exercise.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
+      </mat-card-content>
+
+      <mat-card-actions fxLayoutAlign="center" *ngIf="!isLoading">
+        <button *ngIf="excercises" mat-button type="submit" [disabled]="f.invalid">Start</button>
+        <button *ngIf="!excercises" mat-button type="button" (click)="fetchExcercises()">Fetch Again</button>
+      </mat-card-actions>
     </mat-card>
   </form>
 </section>
-

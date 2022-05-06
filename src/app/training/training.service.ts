@@ -31,10 +31,15 @@ export class TrainingService {
                     calories: doc.payload.doc.data().calories,
                 }
             });
+            // throw(new Error());
         })).subscribe((exercises: Excercise[])=>{
             this.uiService.loadingStateChanged.next(false);
             this.availableExcercises= exercises;
             this.exChanged.next([...this.availableExcercises]);
+        }, error =>{
+            this.uiService.loadingStateChanged.next(false);
+            this.uiService.showSnackbar('Fetching excercise Failed', null, 3000);
+            this.exChanged.next(null);
         }));
     }
 
