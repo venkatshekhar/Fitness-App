@@ -57,7 +57,7 @@ export class TrainingService {
         this.store.select(fromTraining.getActiveTraining).pipe(take(1)).subscribe(ex => {
             this.addDatatoDatabase({ ...ex, date: new Date(), state: 'completed' });
             this.store.dispatch(new Training.StopTraining());
-        })
+        });
 
     }
 
@@ -76,7 +76,7 @@ export class TrainingService {
 
     fetchCompletedOrCancelledExcercises() {
         this.fbSubs.push(this.fireDB.collection('finishedExercises').valueChanges().subscribe((exercises: Excercise[]) => {
-            this.store.dispatch(new Training.StopTraining())
+            this.store.dispatch(new Training.SetFinishedTrainings(exercises))
         }));
     }
 
